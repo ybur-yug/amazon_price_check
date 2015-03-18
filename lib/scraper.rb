@@ -4,26 +4,28 @@ module Scraper
   class Engine
     def initialize
       @browser = Mechanize.new
+      @amazon = @browser.get("http://www.amazon.com")
     end
 
     def browser
       @browser
     end
 
-    def amazon_search(keywords)
-      form = amazon_search_form["field-keywords"]
-      form["field-keywords"] = keywords
-      # submit form
-      # get result
-      # hash of items
-    end
-
     def amazon
-      @browser.get('http://www.amazon.com')
+      @amazon
     end
 
     def amazon_search_form()
-      amazon.forms.first
+      @amazon.form_with(class: "nav-searchbar")
+    end
+
+    def amazon_search(keywords)
+      form = amazon_search_form
+      amazon_search_form do |form|
+        search_field = form["field-keywords"]
+        search_field = keywords
+      end
+      @browser.submit(form)
     end
   end
 end

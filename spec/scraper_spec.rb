@@ -17,6 +17,7 @@ context "A scraper" do
         expect(scraper.amazon.uri.to_s).to eq "http://www.amazon.com/"
       end
       it "can find the search form" do
+        binding.pry
         expect(scraper.amazon_search_form.class).to eq Mechanize::Form
       end
     end
